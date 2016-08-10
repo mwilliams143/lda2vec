@@ -1,5 +1,6 @@
 from spacy.en import English
 from spacy.attrs import LOWER, LIKE_URL, LIKE_EMAIL
+from tqdm import tqdm
 
 import numpy as np
 
@@ -69,7 +70,8 @@ def tokenize(texts, max_length, skip=-2, attr=LOWER, merge=False, nlp=None,
     data = np.zeros((len(texts), max_length), dtype='int32')
     data[:] = skip
     bad_deps = ('amod', 'compound')
-    for row, doc in enumerate(nlp.pipe(texts, **kwargs)):
+    for row, doc in enumerate(tqdm(list(nlp.pipe(texts, **kwargs)),
+                                   desc="tokenizing")):
         if merge:
             # from the spaCy blog, an example on how to merge
             # noun phrases into single tokens

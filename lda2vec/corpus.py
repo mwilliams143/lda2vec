@@ -1,4 +1,6 @@
 from collections import defaultdict
+from tqdm import tqdm
+
 import numpy as np
 import difflib
 import pandas as pd
@@ -552,7 +554,7 @@ class Corpus():
         rep1 = lambda w: w.replace(' ', '_')
         rep2 = lambda w: w.title().replace(' ', '_')
         reps = [rep0, rep1, rep2]
-        for compact in np.arange(top):
+        for compact in tqdm(np.arange(top), desc='compacting'):
             loose = self.compact_to_loose.get(compact, None)
             if loose is None:
                 continue
@@ -576,7 +578,7 @@ class Corpus():
                     choice = np.array(keys_raw)[idx][np.argmin(d)]
                     # choice = difflib.get_close_matches(word, choices)[0]
                     vector = model[choice]
-                    print compact, word, ' --> ', choice
+                    #print compact, word, ' --> ', choice
                 except IndexError:
                     pass
             if vector is None:
